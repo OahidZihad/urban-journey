@@ -6,6 +6,7 @@ import Home from "./Components/Home/Home";
 import { makeStyles } from "@material-ui/core/styles";
 import NoMatch from "./Components/NoMatch/NoMatch";
 import Search from "../src/Components/Search/Search";
+import Login from "./Components/Login/Login";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,8 +24,8 @@ function App() {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Header></Header>
       <Router>
+        <Header></Header>
         <Switch>
           <Route path="/home">
             <Home></Home>
@@ -39,7 +40,7 @@ function App() {
             <Search></Search>
           </Route>
           <Route path="/login">
-            <Search></Search>
+            <Login></Login>
           </Route>
           <Route path="*">
             <NoMatch></NoMatch>

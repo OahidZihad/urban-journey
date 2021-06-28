@@ -30,7 +30,7 @@ const Vehicles = (props) => {
   const history = useHistory();
 
   const handleClick = () => {
-    console.log("clicked");
+    console.log("clicked vehicle");
     history.push("/search");
   };
 

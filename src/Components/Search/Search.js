@@ -18,9 +18,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Search = () => {
   const classes = useStyles();
-  const history = useHistory();
+  let history = useHistory();
   const handleSearch = () => {
-    console.log("clicked");
+    console.log("clicked search btn");
+    console.log(history);
     history.push("/login");
   };
   return (
