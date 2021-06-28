@@ -1,46 +1,51 @@
-import logo from "./logo.svg";
 import "./App.css";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Header from "./Components/Header/Header";
+import backgroundimg from "./Components/images/Bg.png";
+import Home from "./Components/Home/Home";
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import NoMatch from "./Components/NoMatch/NoMatch";
+import Search from "../src/Components/Search/Search";
 
 const useStyles = makeStyles((theme) => ({
-  button: {
-    color: "white",
-    backgroundColor: "tomato",
-  },
-  buttonSize: {
-    borderRadius: "50px",
-    height: "75px",
-    width: "75px",
-    color: "white",
-    backgroundColor: "tomato",
+  root: {
+    minHeight: "100%",
+    minWidth: "100%",
+    backgroundImage: `url(${backgroundimg})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    position: "fixed",
   },
 }));
 
 function App() {
   const classes = useStyles();
   return (
-    <div className="App">
-      <header className="App-header">
-        <Button variant="contained">Default</Button>
-        <br />
-        <Button className={classes.button} variant="contained">
-          Primary
-        </Button>
-        <br />
-        <Button variant="outlined" color="secondary">
-          Secondary
-        </Button>
-        <br />
-        <Button className={classes.buttonSize} variant="contained">
-          Disabled
-        </Button>
-        <br />
-        <Button variant="text" color="primary" href="#contained-buttons">
-          Link
-        </Button>
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
+    <div className={classes.root}>
+      <Header></Header>
+      <Router>
+        <Switch>
+          <Route path="/home">
+            <Home></Home>
+          </Route>
+          <Route exact path="/">
+            <Home></Home>
+          </Route>
+          {/* <Route path="/friend/:friendId">
+          <FriendDetail></FriendDetail>
+        </Route> */}
+          <Route path="/search">
+            <Search></Search>
+          </Route>
+          <Route path="/login">
+            <Search></Search>
+          </Route>
+          <Route path="*">
+            <NoMatch></NoMatch>
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }
