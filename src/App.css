@@ -2,13 +2,14 @@
   text-align: center;
 }
 
-body {
+.body {
   background-image: url(../src/Components/images/Bg.png);
-  min-height: 100%;
+  min-height: 100vh;
   min-width: 100%;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  position: fixed;
 }
 
 .App-logo {
