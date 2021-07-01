@@ -1,0 +1,10 @@
+.container {
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 10fr));
+  grid-template-rows: repeat(auto, 1fr);
+  grid-auto-rows: 1fr;
+  margin: 80px;
+  margin-left: 100px;
+  margin-right: 100px;
+}

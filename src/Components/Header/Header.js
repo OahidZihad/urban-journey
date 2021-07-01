@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import logo from "../images/Urban Riders.png";
@@ -41,7 +41,7 @@ const Header = () => {
   };
   return (
     <div style={{ width: "100%" }}>
-      <Box display="flex" p={1}>
+      <Box display="flex" flexWrap="wrap" p={1}>
         <Box p={1} flexGrow={1}>
           <Button onClick={handleHome}>
             <img className={classes.logo} src={logo} alt="" />

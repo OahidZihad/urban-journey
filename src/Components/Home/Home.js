@@ -4,24 +4,9 @@ import Bike from "../images/Frame.png";
 import Car from "../images/Frame-2.png";
 import Bus from "../images/Frame-1.png";
 import Train from "../images/Group.png";
-import backgroundimg from "../images/Bg.png";
-import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    margin: "80px",
-    paddingLeft: "70px",
-    paddingRight: "70px",
-  },
-}));
+import "./Home.css";
 
 const Home = () => {
-  const classes = useStyles();
   const vehicles = [
     {
       title: "BIKE",
@@ -49,7 +34,7 @@ const Home = () => {
     },
   ];
   return (
-    <div className={classes.root}>
+    <div className="container">
       {vehicles.map((vehicle) => (
         <Vehicles vehicle={vehicle}></Vehicles>
       ))}
