@@ -39,6 +39,7 @@ const Header = () => {
   const handleHome = () => {
     history.push("/home");
   };
+
   return (
     <div style={{ width: "100%" }}>
       <Box display="flex" flexWrap="wrap" p={1}>
@@ -62,13 +63,23 @@ const Header = () => {
           <Button variant="text">Contact</Button>
         </Box>
         <Box className={classes.boxButton} p={1}>
+          {/* {user.isSignedIn ? (
+            <Button
+              onClick={handleClick}
+              className={classes.button}
+              variant="contained"
+            >
+              Sign Out
+            </Button>
+          ) : ( */}
           <Button
             onClick={handleClick}
             className={classes.button}
             variant="contained"
           >
-            Login
+            Sign In
           </Button>
+          {/* )} */}
         </Box>
       </Box>
     </div>

@@ -43,21 +43,20 @@ const useStyles = makeStyles((theme) => ({
     height: "40px",
     textTransform: "none",
   },
+  paperStyle: {
+    padding: "20px",
+    height: "75vh",
+    width: 300,
+    margin: "5px auto",
+  },
+  avatarStyle: {
+    backgroundColor: "tomato",
+  },
 }));
 
 ////// MAIN FUNCTION
 const Login = () => {
   const classes = useStyles();
-  const paperStyle = {
-    padding: "20px",
-    height: "70vh",
-    width: 300,
-    margin: "5px auto",
-  };
-  const avatarStyle = {
-    backgroundColor: "tomato",
-  };
-
   const [newUser, setNewUser] = useState(false);
   const [user, setUser] = useState({
     isSignedIn: false,
@@ -79,7 +78,7 @@ const Login = () => {
           email: email,
         };
         setUser(signedInUser);
-        console.log("user Name", displayName);
+        console.log("user Name", result);
       })
       .catch((error) => {
         var errorCode = error.code;
@@ -87,6 +86,28 @@ const Login = () => {
         var email = error.email;
         var credential = error.credential;
         console.log(errorCode, errorMessage, email, credential);
+      });
+  };
+
+  const handleSignOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then((res) => {
+        // Sign-out successful.
+        const signedOutUser = {
+          isSignedIn: false,
+          name: "",
+          photo: "",
+          email: "",
+          error: "",
+          success: false,
+        };
+        setUser(signedOutUser);
+      })
+      .catch((err) => {
+        // An error happened.
+        console.log(err.message);
       });
   };
 
@@ -109,51 +130,87 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     console.log(user.email, user.password);
-    if (user.email && user.password) {
+    if (newUser && user.email && user.password) {
       firebase
         .auth()
         .createUserWithEmailAndPassword(user.email, user.password)
         .then((userCredential) => {
-          var user = userCredential.user;
-          console.log(user);
-          setUser(user);
+          console.log(userCredential);
+          const newUserInfo = { ...user };
+          newUserInfo.error = "";
+          newUserInfo.success = true;
+          setUser(newUserInfo);
+          updateUserName(user.name);
         })
         .catch((error) => {
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          console.log(errorCode, errorMessage);
+          const newUserInfo = { ...user };
+          newUserInfo.error = error.message;
+          newUserInfo.success = false;
+          setUser(newUserInfo);
         });
     }
 
-    if (user.email && user.password) {
+    if (!newUser && user.email && user.password) {
       firebase
         .auth()
         .signInWithEmailAndPassword(user.email, user.password)
         .then((userCredential) => {
-          var user = userCredential.user;
-          console.log(user);
-          setUser(user);
+          const newUserInfo = { ...user };
+          newUserInfo.error = "";
+          newUserInfo.success = true;
+          setUser(newUserInfo);
+          console.log("sign in user info", userCredential.user);
         })
         .catch((error) => {
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          console.log(errorCode, errorMessage);
+          const newUserInfo = { ...user };
+          newUserInfo.error = error.message;
+          newUserInfo.success = false;
+          setUser(newUserInfo);
         });
     }
 
     event.preventDefault();
   };
 
+  const updateUserName = (name) => {
+    const user = firebase.auth().currentUser;
+    user
+      .updateProfile({
+        displayName: name,
+      })
+      .then(() => {
+        console.log("successfull");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleSignUp = () => {
+    setNewUser(!newUser);
+  };
+
   return (
     <Grid>
-      <Paper elevation={10} style={paperStyle}>
+      <Paper elevation={10} className={classes.paperStyle}>
         <Grid align="center">
-          <Avatar style={avatarStyle}>
+          <Avatar className={classes.avatarStyle}>
             <LockRoundedIcon />
           </Avatar>
-          <h2>Sign In</h2>
+          {newUser ? <h2>Sign Up</h2> : <h2>Sign In</h2>}
         </Grid>
         <form onSubmit={handleSubmit}>
+          {newUser && (
+            <TextField
+              onBlur={handleBlur}
+              name="name"
+              label="Name"
+              placeholder="Your Name"
+              required
+              fullWidth
+              type="text"
+            />
+          )}
           <TextField
             onBlur={handleBlur}
             name="email"
@@ -177,18 +234,20 @@ const Login = () => {
             label="Remember Me"
           />
           <Button className={classes.button} type="submit" fullWidth>
-            Sign In
+            {newUser ? "Sign Up" : "Sign In"}
           </Button>
+
+          {/* <input type="submit" value={newUser ? "Sign Up" : "Sign In"} /> */}
+
           <Typography>
             <Link style={{ color: "tomato" }} href="#">
-              Fotgot Password?
+              {newUser ? " " : "Fotgot Password?"}
             </Link>
           </Typography>
           <Typography style={{ marginTop: "8px" }}>
-            Don't have an account?
-            <Link style={{ color: "tomato" }} href="#">
-              {" "}
-              Sign Up
+            {newUser ? "Already have an account?" : "Don't have an account?"}
+            <Link onClick={handleSignUp} style={{ color: "tomato" }} href="#">
+              {newUser ? " Sign In" : " Sign Up"}
             </Link>
           </Typography>
         </form>
