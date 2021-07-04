@@ -1,7 +1,7 @@
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -19,14 +19,15 @@ const useStyles = makeStyles((theme) => ({
 const Search = () => {
   const classes = useStyles();
   let history = useHistory();
+  const { vehicleId } = useParams();
   const handleSearch = () => {
     console.log("clicked search btn");
     console.log(history);
-    history.push("/login");
+    history.push(`/vehicle/${vehicleId}`);
   };
   return (
     <div>
-      <h1>this is search</h1>
+      <h1>Search Road Map for {vehicleId}</h1>
       <Button
         onClick={handleSearch}
         className={classes.button}

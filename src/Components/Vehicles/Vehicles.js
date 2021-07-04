@@ -31,7 +31,7 @@ const Vehicles = (props) => {
 
   const handleClick = () => {
     console.log("clicked vehicle");
-    history.push("/search");
+    history.push(`/search/${title}`);
   };
 
   const { title, imgUrl, capacity, price } = props.vehicle;
