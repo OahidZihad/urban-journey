@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import "./Login.css";
 import LockRoundedIcon from "@material-ui/icons/LockRounded";
@@ -20,6 +20,8 @@ import { useState } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import firebaseConfig from "../../firebase.config";
+import { UserContext } from "../../App";
+import { useHistory, useLocation } from "react-router-dom";
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
@@ -65,6 +67,14 @@ const Login = () => {
     password: "",
   });
 
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+
+  //Redirect to the desired page after login
+  //https://reactrouter.com/web/example/auth-workflow
+  let history = useHistory();
+  let location = useLocation();
+  let { from } = location.state || { from: { pathname: "/" } };
+
   var googleProvider = new firebase.auth.GoogleAuthProvider();
   const handleGoogleLogin = () => {
     firebase
@@ -78,6 +88,7 @@ const Login = () => {
           email: email,
         };
         setUser(signedInUser);
+        setLoggedInUser(signedInUser);
         console.log("user Name", result);
       })
       .catch((error) => {
@@ -156,9 +167,18 @@ const Login = () => {
         .signInWithEmailAndPassword(user.email, user.password)
         .then((userCredential) => {
           const newUserInfo = { ...user };
+
+          ////// alada kore lekha laglo ei duta line. keno j (...user)
+          ////// theke update hocche na, seta bujhtesina....
+          newUserInfo.isSignedIn = true;
+          newUserInfo.name = userCredential.user.displayName;
+
           newUserInfo.error = "";
           newUserInfo.success = true;
           setUser(newUserInfo);
+          setLoggedInUser(newUserInfo);
+          history.replace(from); ////Redirect to the desired page after login,,, https://reactrouter.com/web/example/auth-workflow
+          console.log("sign in user Name", userCredential.user.displayName);
           console.log("sign in user info", userCredential.user);
         })
         .catch((error) => {

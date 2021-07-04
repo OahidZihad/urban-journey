@@ -4,6 +4,17 @@ import { useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import logo from "../images/Urban Riders.png";
+import { useContext } from "react";
+import { UserContext } from "../../App";
+import firebase from "firebase/app";
+import "firebase/auth";
+import firebaseConfig from "../../firebase.config";
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app();
+}
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -31,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header = () => {
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+
   const classes = useStyles();
   let history = useHistory();
   const handleClick = () => {
@@ -38,6 +51,29 @@ const Header = () => {
   };
   const handleHome = () => {
     history.push("/home");
+  };
+
+  const handleSignOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then((res) => {
+        // Sign-out successful.
+        const signedOutUser = {
+          ...loggedInUser,
+          isSignedIn: false,
+          name: "",
+          photo: "",
+          email: "",
+          error: "",
+          success: false,
+        };
+        setLoggedInUser(signedOutUser);
+      })
+      .catch((err) => {
+        // An error happened.
+        console.log(err.message);
+      });
   };
 
   return (
@@ -63,24 +99,25 @@ const Header = () => {
           <Button variant="text">Contact</Button>
         </Box>
         <Box className={classes.boxButton} p={1}>
-          {/* {user.isSignedIn ? (
+          {loggedInUser.isSignedIn ? (
+            <Button className={classes.button}>{loggedInUser.name}</Button>
+          ) : (
             <Button
               onClick={handleClick}
               className={classes.button}
               variant="contained"
             >
+              Sign In
+            </Button>
+          )}
+        </Box>
+        {loggedInUser.isSignedIn ? (
+          <Box className={classes.boxButton} p={1}>
+            <Button className={classes.button} onClick={handleSignOut}>
               Sign Out
             </Button>
-          ) : ( */}
-          <Button
-            onClick={handleClick}
-            className={classes.button}
-            variant="contained"
-          >
-            Sign In
-          </Button>
-          {/* )} */}
-        </Box>
+          </Box>
+        ) : null}
       </Box>
     </div>
   );
