@@ -16,7 +16,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Search = () => {
+const Search = (props) => {
+  console.log(props);
   const classes = useStyles();
   let history = useHistory();
   const { vehicleId } = useParams();

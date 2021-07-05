@@ -5,8 +5,12 @@ import Car from "../images/Frame-2.png";
 import Bus from "../images/Frame-1.png";
 import Train from "../images/Group.png";
 import "./Home.css";
+import { useHistory } from "react-router-dom";
 
 const Home = () => {
+  const history = useHistory();
+  console.log(history);
+
   const vehicles = [
     {
       title: "BIKE",
@@ -33,6 +37,7 @@ const Home = () => {
       price: 300,
     },
   ];
+
   return (
     <div className="container">
       {vehicles.map((vehicle) => (

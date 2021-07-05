@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Vehicles = (props) => {
+  console.log(props);
   const classes = useStyles();
   const history = useHistory();
 
