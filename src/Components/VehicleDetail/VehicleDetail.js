@@ -21,6 +21,8 @@ const center = {
 const VehicleDetail = () => {
   const [directionResponse, setDirectionResponse] = useState(null);
   const { vehicleId } = useParams();
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
 
   const onLoad = (marker) => {
     console.log("marker: ", marker);
@@ -30,24 +32,40 @@ const VehicleDetail = () => {
     <div>
       <div>
         <h1>Here is the Road Map for {vehicleId}</h1>
+        <input
+          type="text"
+          placeholder="From"
+          onBlur={(e) => setOrigin(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="To"
+          onBlur={(e) => setDestination(e.target.value)}
+        />
       </div>
-      <LoadScript googleMapsApiKey="AIzaSyCVRJzWxAVF3_K6k7TRaAz1S83fRX_Vmw4">
+      <LoadScript
+        origin={origin}
+        destination={destination}
+        googleMapsApiKey="AIzaSyCVRJzWxAVF3_K6k7TRaAz1S83fRX_Vmw4"
+      >
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
           {/* <Marker position={center} onLoad={onLoad}></Marker> */}
-          <DirectionsService
-            // required
-            options={{
-              destination: "Al Modina Super Market Gaibandha Bangladesh",
-              origin: "Gaibandha Fire Station Gaibandha Bangladesh",
-              travelMode: "DRIVING",
-            }}
-            // required
-            callback={(res) => {
-              if (res !== null) {
-                setDirectionResponse(res);
-              }
-            }}
-          />
+          {origin !== "" && destination !== "" && (
+            <DirectionsService
+              // required
+              options={{
+                destination: "Al Modina Super Market Gaibandha Bangladesh",
+                origin: "Gaibandha Fire Station Gaibandha Bangladesh",
+                travelMode: "DRIVING",
+              }}
+              // required
+              callback={(res) => {
+                if (res !== null) {
+                  setDirectionResponse(res);
+                }
+              }}
+            />
+          )}
           {directionResponse && (
             <DirectionsRenderer
               // required
